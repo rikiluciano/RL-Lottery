@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabla de 10x20</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="estilos2.css">
+</head>
+<body>
+  <center>
+    <table border="1" align="center" id="tabla-numeros"></table>
+  </center>
+
+  <!-- Botón de reinicio -->
+  <button id="resetButton" class="reset-btn">Reiniciar conteo</button>
+
+  <!-- Modal de confirmación -->
+  <div id="resetModal" class="modal">
+    <div class="modal-content">
+      <p>¿Estás segura de que deseas reiniciar el conteo? Esta acción no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button id="cancelReset" class="cancel-btn">Cancelar</button>
+        <button id="confirmReset" class="confirm-btn">Sí, reiniciar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificación tipo toast -->
+  <div id="toast" class="toast">¡Conteo reiniciado correctamente!</div>
+
+  <script src="script2.js"></script>
+</body>
+</html>
