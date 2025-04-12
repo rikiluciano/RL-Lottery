@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de Sesión</title>
+  
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #4e54c8, #8f94fb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4e54c8;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #3e41a6;
+    }
+
+    .toggle-btn {
+      margin-top: 10px;
+      color: #4e54c8;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    #mensaje {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      padding: 12px 25px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; bottom: 0; }
+      to { opacity: 1; bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="registro-container">
+    <h2>Registro</h2>
+    <label>Nombre completo</label>
+    <input type="text" id="nombre" required>
+    
+    <label>Nombre de usuario</label>
+    <input type="text" id="usuario" required>
+    
+    <label>Contraseña</label>
+    <input type="password" id="contrasena" required>
+    
+    <label>Confirmar contraseña</label>
+    <input type="password" id="confirmar-contrasena" required>
+    
+    <!-- Preguntas de seguridad -->
+    <label for="pregunta1">Pregunta de seguridad 1</label>
+    <select id="pregunta1">
+      <option value="">Selecciona una pregunta</option>
+      <option value="color_favorito">¿Cuál es tu color favorito?</option>
+      <option value="comida_favorita">¿Cuál es tu comida favorita?</option>
+      <option value="pais_favorito">¿Cuál es tu país favorito?</option>
+    </select>
+    <input type="text" id="respuesta1" placeholder="Respuesta">
+    
+    <label for="pregunta2">Pregunta de seguridad 2</label>
+    <select id="pregunta2">
+      <option value="">Selecciona una pregunta</option>
+      <option value="color_favorito">¿Cuál es tu color favorito?</option>
+      <option value="comida_favorita">¿Cuál es tu comida favorita?</option>
+      <option value="pais_favorito">¿Cuál es tu país favorito?</option>
+    </select>
+    <input type="text" id="respuesta2" placeholder="Respuesta">
+    
+    <label for="pregunta3">Pregunta de seguridad 3</label>
+    <select id="pregunta3">
+      <option value="">Selecciona una pregunta</option>
+      <option value="color_favorito">¿Cuál es tu color favorito?</option>
+      <option value="comida_favorita">¿Cuál es tu comida favorita?</option>
+      <option value="pais_favorito">¿Cuál es tu país favorito?</option>
+    </select>
+    <input type="text" id="respuesta3" placeholder="Respuesta">
+    
+    <button onclick="registrarUsuario()">Crear cuenta</button>
+    <div class="toggle-btn" onclick="toggleForms()">¿Ya tienes cuenta? Inicia sesión</div>
+  </div>
+  
+  <div class="container" id="login-container" style="display:none">
+    <h2>Iniciar sesión</h2>
+    <label>Usuario</label>
+    <input type="text" id="login-usuario">
+    <label>Contraseña</label>
+    <input type="password" id="login-contrasena">
+    <button onclick="iniciarSesion()">Entrar</button>
+    <div class="toggle-btn" onclick="toggleForms()">¿No tienes cuenta? Regístrate</div>
+    <div class="toggle-btn" onclick="mostrarRecuperacion()">¿Olvidaste tu contraseña?</div>
+  </div>
+  
+  <div class="container" id="recuperar-container" style="display:none">
+    <h2>Recuperar Contraseña</h2>
+    <label>Usuario</label>
+    <input type="text" id="recuperar-usuario">
+    <label>Respuesta 1</label>
+    <input type="text" id="recuperar-respuesta1">
+    <label>Respuesta 2</label>
+    <input type="text" id="recuperar-respuesta2">
+    <label>Respuesta 3</label>
+    <input type="text" id="recuperar-respuesta3">
+    <label>Nueva contraseña</label>
+    <input type="password" id="nueva-contrasena">
+    <button onclick="recuperarContrasena()">Actualizar contraseña</button>
+    <div class="toggle-btn" onclick="volverALogin()">Volver al inicio de sesión</div>
+  </div>
+  
+  <!-- Mensaje flotante -->
+  <div id="mensaje" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 20px; border-radius:10px;"></div>
+  
+  <script>
+    const API_KEY = '$2a$10$R47nF8Jwysp8tum8vhlkAOq/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6';
+    const ACCESS_KEY = '$2a$10$NV5uk0VSWvnyVwTRSo228exXdxhD5YHsAmpQDB3z.jZec0yH2ckam';
+    const BIN_USUARIOS = '67f597958a456b79668527ea';
+    const BIN_MASTER = '67f58d578a456b7966852344';
+    
+    function mostrarMensaje(texto) {
+      const mensaje = document.getElementById("mensaje");
+      mensaje.textContent = texto;
+      mensaje.style.display = "block";
+      setTimeout(() => mensaje.style.display = "none", 3000);
+    }
+    
+    function toggleForms() {
+      const registro = document.getElementById('registro-container');
+      const login = document.getElementById('login-container');
+      const recuperar = document.getElementById('recuperar-container');
+      const mostrandoRegistro = registro.style.display !== 'none';
+      registro.style.display = mostrandoRegistro ? 'none' : 'block';
+      login.style.display = mostrandoRegistro ? 'block' : 'none';
+      recuperar.style.display = 'none';
+    }
+    
+    function mostrarRecuperacion() {
+      document.getElementById('login-container').style.display = 'none';
+      document.getElementById('recuperar-container').style.display = 'block';
+    }
+    
+    function volverALogin() {
+      document.getElementById('recuperar-container').style.display = 'none';
+      document.getElementById('login-container').style.display = 'block';
+    }
+    
+    async function registrarUsuario() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const usuario = document.getElementById('usuario').value.trim();
+      const contrasena = document.getElementById('contrasena').value;
+      const confirmar = document.getElementById('confirmar-contrasena').value;
+      
+      const pregunta1 = document.getElementById('pregunta1').value;
+      const respuesta1 = document.getElementById('respuesta1').value.trim().toLowerCase();
+      const pregunta2 = document.getElementById('pregunta2').value;
+      const respuesta2 = document.getElementById('respuesta2').value.trim().toLowerCase();
+      const pregunta3 = document.getElementById('pregunta3').value;
+      const respuesta3 = document.getElementById('respuesta3').value.trim().toLowerCase();
+      
+      if (!nombre || !usuario || !contrasena || !confirmar || !pregunta1 || !respuesta1 || !pregunta2 || !respuesta2 || !pregunta3 || !respuesta3) {
+        return mostrarMensaje("Todos los campos son obligatorios.");
+      }
+      if (contrasena !== confirmar) {
+        return mostrarMensaje("Las contraseñas no coinciden.");
+      }
+      
+      try {
+        const resUsuarios = await fetch(`https://api.jsonbin.io/v3/b/${BIN_USUARIOS}/latest`, {
+          headers: { 'X-Master-Key': API_KEY, 'X-Access-Key': ACCESS_KEY }
+        });
+        const dataUsuarios = await resUsuarios.json();
+        const usuarios = dataUsuarios.record || [];
+        
+        if (usuarios.find(u => u.usuario === usuario)) {
+          return mostrarMensaje("Este usuario ya existe.");
+        }
+        
+        const resMaster = await fetch(`https://api.jsonbin.io/v3/b/${BIN_MASTER}/latest`, {
+          headers: { 'X-Master-Key': API_KEY }
+        });
+        const dataMaster = await resMaster.json();
+        const conteoGlobal = dataMaster.record.conteo;
+        
+        const nuevoUsuario = {
+          nombre,
+          usuario,
+          contrasena,
+          preguntas: [
+            { pregunta: pregunta1, respuesta: respuesta1 },
+            { pregunta: pregunta2, respuesta: respuesta2 },
+            { pregunta: pregunta3, respuesta: respuesta3 }
+          ],
+          fechaReinicio: null,
+          conteoPersonal: { ...conteoGlobal }
+        };
+        
+        usuarios.push(nuevoUsuario);
+        
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_USUARIOS}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY,
+            'X-Access-Key': ACCESS_KEY
+          },
+          body: JSON.stringify(usuarios)
+        });
+        
+        mostrarMensaje("Cuenta creada exitosamente.");
+        setTimeout(() => {
+          localStorage.setItem('usuarioActivo', usuario);
+          window.location.href = 'home.html';
+        }, 1000);
+        
+      } catch (err) {
+        console.error(err);
+        mostrarMensaje("Error al registrar usuario.");
+      }
+    }
+    
+    async function recuperarContrasena() {
+      const usuario = document.getElementById('recuperar-usuario').value.trim();
+      const r1 = document.getElementById('recuperar-respuesta1').value.trim().toLowerCase();
+      const r2 = document.getElementById('recuperar-respuesta2').value.trim().toLowerCase();
+      const r3 = document.getElementById('recuperar-respuesta3').value.trim().toLowerCase();
+      const nueva = document.getElementById('nueva-contrasena').value;
+      
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_USUARIOS}/latest`, {
+          headers: { 'X-Master-Key': API_KEY, 'X-Access-Key': ACCESS_KEY }
+        });
+        const data = await res.json();
+        const usuarios = data.record || [];
+        
+        const index = usuarios.findIndex(u => u.usuario === usuario);
+        if (index === -1) return mostrarMensaje("Usuario no encontrado.");
+        
+        const u = usuarios[index];
+        const respuestas = u.preguntas.map(p => p.respuesta);
+        if (respuestas[0] !== r1 || respuestas[1] !== r2 || respuestas[2] !== r3) {
+          return mostrarMensaje("Respuestas incorrectas.");
+        }
+        
+        usuarios[index].contrasena = nueva;
+        
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_USUARIOS}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY,
+            'X-Access-Key': ACCESS_KEY
+          },
+          body: JSON.stringify(usuarios)
+        });
+        
+        mostrarMensaje("Contraseña actualizada.");
+        setTimeout(() => volverALogin(), 1000);
+        
+      } catch (err) {
+        console.error(err);
+        mostrarMensaje("Error al recuperar contraseña.");
+      }
+    }
+    async function iniciarSesion() {
+  const usuario = document.getElementById('login-usuario').value.trim();
+  const contrasena = document.getElementById('login-contrasena').value;
+  
+  if (!usuario || !contrasena) {
+    return mostrarMensaje("Completa todos los campos.");
+  }
+  
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_USUARIOS}/latest`, {
+      headers: {
+        'X-Master-Key': API_KEY,
+        'X-Access-Key': ACCESS_KEY
+      }
+    });
+    const data = await res.json();
+    const usuarios = data.record || [];
+    
+    const user = usuarios.find(u => u.usuario === usuario && u.contrasena === contrasena);
+    if (!user) {
+      return mostrarMensaje("Usuario o contraseña incorrectos.");
+    }
+    
+    mostrarMensaje("Bienvenido, " + user.nombre);
+    setTimeout(() => {
+      localStorage.setItem('usuarioActivo', usuario);
+      window.location.href = 'home2.html';
+    }, 1000);
+    
+  } catch (error) {
+    console.error(error);
+    mostrarMensaje("Error al iniciar sesión.");
+  }
+}
+  </script>
+</body>
+</html>

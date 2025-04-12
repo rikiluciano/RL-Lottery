@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar sesión</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .mensaje {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border-radius: 5px;
+      display: none;
+      text-align: center;
+    }
+
+    .exito { background-color: #d4edda; color: #155724; }
+    .error { background-color: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Iniciar sesión</h2>
+
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" placeholder="Nombre de usuario" />
+
+    <label for="contrasena">Contraseña</label>
+    <input type="password" id="contrasena" placeholder="Contraseña" />
+
+    <button onclick="iniciarSesion()">Entrar</button>
+
+    <div id="mensaje" class="mensaje"></div>
+  </div>
+
+  <script>
+    const BIN_ID = '67f597958a456b79668527ea'; // Usa el mismo BIN_ID
+    const API_KEY = '$2a$10$R47nF8Jwysp8tum8vhlkAOq/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6';
+    const ACCESS_KEY = '$2a$10$NV5uk0VSWvnyVwTRSo228exXdxhD5YHsAmpQDB3z.jZec0yH2ckam';
+
+    async function iniciarSesion() {
+  const usuario = document.getElementById('usuario').value.trim();
+  const contrasena = document.getElementById('contrasena').value;
+  
+  if (!usuario || !contrasena) {
+    return mostrarMensaje("Por favor ingresa tu usuario y contraseña.");
+  }
+  
+  try {
+    // Realizar la solicitud GET a JSONBin
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: {
+        'X-Master-Key': API_KEY,
+        'X-Access-Key': ACCESS_KEY
+      }
+    });
+    
+    // Verificar si la respuesta fue exitosa
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+    
+    // Parsear la respuesta JSON
+    const data = await res.json();
+    console.log("Datos recibidos:", data); // Mostrar los datos completos en consola para depuración
+    
+    const usuarios = data.record || []; // Asegurarnos de que 'usuarios' es un arreglo
+    
+    if (!usuarios || usuarios.length === 0) {
+      return mostrarMensaje("No hay usuarios registrados.");
+    }
+    
+    // Buscar el usuario en el arreglo
+    const usuarioExistente = usuarios.find(u => u.usuario === usuario);
+    
+    if (!usuarioExistente) {
+      return mostrarMensaje("Usuario no encontrado.");
+    }
+    
+    // Verificar si la contraseña es correcta
+    if (usuarioExistente.contrasena !== contrasena) {
+      return mostrarMensaje("Contraseña incorrecta.");
+    }
+    
+    // Si la autenticación es exitosa
+    mostrarMensaje("Inicio de sesión exitoso.");
+    // Redirigir a home.html o donde sea necesario
+    setTimeout(() => window.location.href = "home.html", 1500);
+    
+  } catch (err) {
+    console.error(err);
+    mostrarMensaje("Error al iniciar sesión.");
+    alert("Detalles del error: " + err); // Mostrar detalles del error en una alerta para depuración
+  }
+}
+
+    function mostrarMensaje(texto, tipo) {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.textContent = texto;
+      mensaje.className = 'mensaje ' + tipo;
+      mensaje.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

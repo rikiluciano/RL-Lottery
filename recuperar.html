@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recuperar Cuenta</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 40px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #0069d9;
+    }
+
+    .mensaje {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #ffeeba;
+      color: #856404;
+    }
+
+    .exito {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    .resultado {
+      margin-top: 20px;
+      background: #e9ecef;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Recuperar Cuenta</h2>
+
+    <div id="mensaje" class="mensaje oculto"></div>
+
+    <label for="usuario">Nombre de usuario</label>
+    <input type="text" id="usuario" placeholder="Tu nombre de usuario" />
+
+    <button onclick="buscarPreguntas()">Cargar preguntas</button>
+
+    <div id="preguntas-container" class="oculto">
+      <div id="preguntas"></div>
+      <button onclick="verificarRespuestas()">Verificar respuestas</button>
+    </div>
+
+    <div class="resultado oculto" id="resultado"></div>
+
+    <div id="cambio-container" class="oculto">
+  <label for="nueva-contrasena">Nueva contraseña</label>
+  <input type="password" id="nueva-contrasena" placeholder="Escribe una nueva contraseña" />
+  
+  <label for="confirmar-contrasena">Confirmar contraseña</label>
+  <input type="password" id="confirmar-contrasena" placeholder="Confirma la nueva contraseña" />
+  
+  <button onclick="guardarNuevaContrasena()">Guardar contraseña</button>
+</div>
+
+  <script>
+    const API_KEY = '$2a$10$R47nF8Jwysp8tum8vhlkAOq/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6';
+    const ACCESS_KEY = '$2a$10$NV5uk0VSWvnyVwTRSo228exXdxhD5YHsAmpQDB3z.jZec0yH2ckam';
+    const BIN_ID = '67f1d9d58a456b7966834056';
+
+    let usuarioEncontrado = null;
+    let listaUsuarios = [];
+
+    function mostrarMensaje(texto, tipo = 'info') {
+      const div = document.getElementById('mensaje');
+      div.className = 'mensaje'; // Limpiamos clases previas
+      div.textContent = texto;
+      if (tipo === 'error') div.classList.add('error');
+      else if (tipo === 'exito') div.classList.add('exito');
+      div.classList.remove('oculto');
+    }
+
+    async function buscarPreguntas() {
+      const usuarioInput = document.getElementById('usuario').value.trim();
+      if (!usuarioInput) {
+        mostrarMensaje('Ingresa tu nombre de usuario.', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: {
+            'X-Master-Key': API_KEY,
+            'X-Access-Key': ACCESS_KEY,
+          },
+        });
+        const data = await res.json();
+        listaUsuarios = data.record;
+
+        const user = listaUsuarios.find((u) => u.usuario === usuarioInput);
+        if (!user) {
+          mostrarMensaje('Usuario no encontrado.', 'error');
+          return;
+        }
+
+        usuarioEncontrado = user;
+
+        const preguntasDiv = document.getElementById('preguntas');
+        preguntasDiv.innerHTML = '';
+        user.preguntas.forEach((p, i) => {
+          preguntasDiv.innerHTML += `
+            <label>${p.pregunta}</label>
+            <input type="text" id="respuesta${i}" placeholder="Respuesta">
+          `;
+        });
+
+        document.getElementById('preguntas-container').classList.remove('oculto');
+        document.getElementById('resultado').classList.add('oculto');
+        document.getElementById('cambio-container').classList.add('oculto');
+        mostrarMensaje('Preguntas cargadas. Contesta para verificar.', 'info');
+
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje('Error al buscar los datos.', 'error');
+      }
+    }
+
+    function verificarRespuestas() {
+      const respuestasCorrectas = usuarioEncontrado.preguntas.every((p, i) => {
+        const r = document.getElementById('respuesta' + i).value.trim().toLowerCase();
+        return r === p.respuesta;
+      });
+
+      const resultado = document.getElementById('resultado');
+      resultado.classList.remove('oculto');
+
+      if (respuestasCorrectas) {
+        resultado.innerHTML = `
+          <strong>¡Verificación exitosa!</strong><br>
+          Nombre completo: ${usuarioEncontrado.nombre}<br>
+          Contraseña actual: <strong>${usuarioEncontrado.contrasena}</strong>
+        `;
+        mostrarMensaje('Puedes cambiar tu contraseña si lo deseas.', 'exito');
+        document.getElementById('cambio-container').classList.remove('oculto');
+      } else {
+        resultado.innerHTML = '<strong>Las respuestas no coinciden. Intenta nuevamente.</strong>';
+        mostrarMensaje('Las respuestas no coinciden.', 'error');
+        document.getElementById('cambio-container').classList.add('oculto');
+      }
+    }
+
+    async function guardarNuevaContrasena() {
+  const nueva = document.getElementById('nueva-contrasena').value.trim();
+  const confirmar = document.getElementById('confirmar-contrasena').value.trim();
+  
+  if (!nueva || !confirmar) {
+    mostrarMensaje('Completa ambos campos de contraseña.', 'error');
+    return;
+  }
+  
+  if (nueva.length < 6) {
+    mostrarMensaje('La contraseña debe tener al menos 6 caracteres.', 'error');
+    return;
+  }
+  
+  if (nueva !== confirmar) {
+    mostrarMensaje('Las contraseñas no coinciden.', 'error');
+    return;
+  }
+  
+  // Actualizar la contraseña en la lista
+  listaUsuarios = listaUsuarios.map((u) => {
+    if (u.usuario === usuarioEncontrado.usuario) {
+      return { ...u, contrasena: nueva };
+    }
+    return u;
+  });
+  
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': API_KEY,
+        'X-Access-Key': ACCESS_KEY,
+      },
+      body: JSON.stringify(listaUsuarios),
+    });
+    
+    if (res.ok) {
+      mostrarMensaje('¡Contraseña actualizada con éxito! Redirigiendo al inicio de sesión...', 'exito');
+      document.getElementById('nueva-contrasena').value = '';
+      document.getElementById('confirmar-contrasena').value = '';
+      setTimeout(() => {
+        window.location.href = 'login.html'; // cambia esto si tu página de login tiene otro nombre
+      }, 3000);
+    } else {
+      throw new Error('Error al guardar');
+    }
+  } catch (error) {
+    console.error(error);
+    mostrarMensaje('No se pudo guardar la nueva contraseña.', 'error');
+  }
+}
+</body>
+</html>
