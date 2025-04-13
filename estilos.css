@@ -1,5 +1,6 @@
 table {
   width: 100%;
+  margin-top: 50px
 }
 
 th {
@@ -17,8 +18,8 @@ td {
 
 .reset-btn {
   align: center;
-  margin-top: 20px;
-  padding: 10px 20px;
+  margin-top: 10px;
+  padding: 12px 20px;
   background-color: #ff6b6b;
   color: white;
   border: none;
@@ -26,6 +27,7 @@ td {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  right: 1px;
 }
 
 .reset-btn:hover {
@@ -108,4 +110,27 @@ td {
 .toast.show {
   visibility: visible;
   opacity: 1;
+}
+.logout-btn {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
+
+.logout-btn i {
+  margin-right: 5px;
 }
