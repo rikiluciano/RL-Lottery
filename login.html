@@ -146,5 +146,17 @@
       mensaje.style.display = 'block';
     }
   </script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const sesionActiva = localStorage.getItem('usuarioActivo');
+    
+    if (sesionActiva) {
+      console.log("Sesión activa encontrada para el usuario:", sesionActiva);
+      window.location.href = "Home.html";
+    } else {
+      console.log("No se encontró ninguna sesión activa.");
+    }
+  });
+</script>
 </body>
 </html>
