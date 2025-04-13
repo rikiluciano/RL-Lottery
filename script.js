@@ -25,7 +25,7 @@ for (let i = 0; i < 100; i += 10) {
 }
 
 const rssFeeds = ['https://enloteria.com/rss'];
-const binId = '67fc06d48561e97a50febe98';
+const usuariosRL = '67fc06d48561e97a50febe98';
 const masterKey = '$2a$10$R47nF8Jwysp8tum8vhlkAOq/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6';
 
 function actualizarTabla(conteo) {
@@ -37,7 +37,7 @@ function actualizarTabla(conteo) {
 
 async function cargarDatosDesdeJSONBin() {
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${usuariosRL}/latest`, {
       headers: { 'X-Master-Key': masterKey }
     });
     const data = await res.json();
@@ -49,7 +49,7 @@ async function cargarDatosDesdeJSONBin() {
 }
 
 function guardarDatosEnJSONBin(data) {
-  return fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+  return fetch(`https://api.jsonbin.io/v3/b/${usuariosRL}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -116,4 +116,12 @@ document.getElementById('confirmReset').addEventListener('click', () => {
     itemsProcesados: []
   };
   guardarDatosEnJSONBin(vacio).then(() => location.reload());
+});
+document.getElementById('logoutButton').addEventListener('click', () => {
+  // Eliminar usuario del almacenamiento
+  localStorage.removeItem('usuarioActivo');
+  sessionStorage.removeItem('usuarioActivo');
+  
+  // Redirigir al login
+  window.location.href = 'index.html';
 });
