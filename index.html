@@ -106,18 +106,22 @@
       to { opacity: 1; bottom: 20px; }
     }
   </style>
-<script>
-  // Verifica si hay una sesión activa al cargar la página
+  
+  <script>
   window.addEventListener('DOMContentLoaded', () => {
     const sesionActiva = localStorage.getItem('usuarioActivo');
+
+    // Si ya estoy en index.html y no hay sesión, no redirijo a ningún lado
     if (sesionActiva) {
       console.log("Sesión activa encontrada:", sesionActiva);
       window.location.href = "home.html";
     } else {
-      console.log("No se encontró ninguna sesión activa.");
+      //console.log("No se encontró ninguna sesión activa. Permaneciendo en index.html");
+      // No redirigimos, el usuario verá el formulario de login
     }
   });
 </script>
+  
 </head>
 <body>
   <div class="container" id="registro-container">
@@ -381,5 +385,6 @@
   }
 }
   </script>
+</script>
 </body>
 </html>
