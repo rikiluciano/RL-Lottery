@@ -89,6 +89,7 @@
       border-radius: 8px;
     }
   </style>
+  
 </head>
 <body>
   <div class="container">
@@ -247,7 +248,7 @@
       document.getElementById('nueva-contrasena').value = '';
       document.getElementById('confirmar-contrasena').value = '';
       setTimeout(() => {
-        window.location.href = 'login.html'; // cambia esto si tu página de login tiene otro nombre
+        window.location.href = 'index.html'; // cambia esto si tu página de login tiene otro nombre
       }, 3000);
     } else {
       throw new Error('Error al guardar');
