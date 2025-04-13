@@ -25,7 +25,7 @@ for (let i = 0; i < 100; i += 10) {
 }
 
 const rssFeeds = ['https://enloteria.com/rss'];
-const binId = '67f869f78561e97a50fd2129';
+const binId = '67fc06d48561e97a50febe98';
 const masterKey = '$2a$10$R47nF8Jwysp8tum8vhlkAOq/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6';
 
 function actualizarTabla(conteo) {
