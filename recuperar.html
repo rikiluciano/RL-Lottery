@@ -122,7 +122,7 @@
   <script>
     const API_KEY = '$2a$10$R47nF8Jwysp8tum8vhlkAOq/QNQz2Y7zY3UnvE5qEfAFuQDIQHhs6';
     const ACCESS_KEY = '$2a$10$NV5uk0VSWvnyVwTRSo228exXdxhD5YHsAmpQDB3z.jZec0yH2ckam';
-    const BIN_ID = '67fc06d48561e97a50febe98';
+    const usuariosRL = '67fc06d48561e97a50febe98';
 
     let usuarioEncontrado = null;
     let listaUsuarios = [];
@@ -144,7 +144,7 @@
       }
 
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${usuariosRL}/latest`, {
           headers: {
             'X-Master-Key': API_KEY,
             'X-Access-Key': ACCESS_KEY,
@@ -233,7 +233,7 @@
   });
   
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${usuariosRL}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
