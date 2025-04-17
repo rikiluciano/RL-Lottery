@@ -6,22 +6,42 @@
   <title>Tabla de 10x20</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="estilos.css">
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const sesionActiva = localStorage.getItem('usuarioActivo');
-    
-    // Si ya estoy en index.html y no hay sesión, no redirijo a ningún lado
-    if (sesionActiva) {} else {
-      window.location.href = "index.html";
-    }
-  });
-</script>
 </head>
 <body>
-  <body>
-  <button class="logout-btn" id="logoutButton">
-    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-  </button>
+<!-- Botón de cerrar sesión -->
+<button id="btnCerrarSesion" class="boton-cerrar-sesion">Cerrar sesión</button>
+
+<style>
+  .boton-cerrar-sesion {
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 5px;
+    right: 10px;
+    z-index: 999;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .boton-cerrar-sesion:hover {
+    background: linear-gradient(to right, #ff4b2b, #ff416c);
+    transform: scale(1.05);
+  }
+</style>
+
+<script>
+  document.getElementById("btnCerrarSesion").addEventListener("click", () => {
+    localStorage.removeItem("usuarioActivo");
+    sessionStorage.clear();
+    window.location.replace("index.html");
+  });
+</script>
+  </style>
   <center>
     <table border="1" align="center" id="tabla-numeros"></table>
   </center>
